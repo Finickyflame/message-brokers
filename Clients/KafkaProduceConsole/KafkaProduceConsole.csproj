@@ -2,11 +2,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UserSecretsId>bab52282-7918-4589-ab2e-5d27f6f8367e</UserSecretsId>
+    <UserSecretsId>5ffa3535-958e-42ec-aa45-c78a65a56329</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="33.0.2" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Hosting.Common\Hosting.Common.csproj" />
-    <ProjectReference Include="..\MessageBrokers.Kafka\MessageBrokers.Kafka.csproj" />
+    <ProjectReference Include="..\..\MessageBrokers.Kafka\MessageBrokers.Kafka.csproj" />
   </ItemGroup>
 </Project>
