@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>MessageBrokers</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ArtemisNetClient" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessageBrokers\MessageBrokers.csproj" />
+  </ItemGroup>
+</Project>
