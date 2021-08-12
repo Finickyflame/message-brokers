@@ -1,13 +1,11 @@
 ﻿using Confluent.Kafka;
-using MessageBrokers.Kafka;
 using MessageBrokers.Kafka.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 
-// ReSharper disable once CheckNamespace
-namespace MessageBrokers
+namespace MessageBrokers.Kafka
 {
     public static class KafkaExtensions
     {

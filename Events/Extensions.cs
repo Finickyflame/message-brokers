@@ -1,5 +1,4 @@
-﻿using Events.Internals;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Events
@@ -12,12 +11,12 @@ namespace Events
             => services.AddTransient<IEventHandler<TEvent>, TEventHandler>();
 
         public static IServiceCollection AddInMemoryEventDispatcher(this IServiceCollection services) => services
-                .AddSingleton<IEventDispatcher, InMemoryEventDispatcher>()
-                .AddInternalEventDispatcher();
+                .TryAddEventDispatcher();
 
-        internal static IServiceCollection AddInternalEventDispatcher(this IServiceCollection services)
+        internal static IServiceCollection TryAddEventDispatcher(this IServiceCollection services)
         {
-            services.TryAddSingleton<IInternalEventDispatcher, InMemoryEventDispatcher>();
+            services.TryAddSingleton<InMemoryEventDispatcher>();
+            services.TryAddSingleton<IEventDispatcher, InMemoryEventDispatcher>();
             return services;
         }
     }

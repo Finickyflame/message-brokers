@@ -1,7 +1,7 @@
 ﻿using KafkaConsumeConsole.Events;
 using KafkaConsumeConsole.Options;
 using KafkaConsumeConsole.Tasks;
-using MessageBrokers;
+using MessageBrokers.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace KafkaConsumeConsole
                     .AddTransient<IApplicationTask, ConsumeOrdersCreatedTask>()
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration("kafka"))
                     .AddKafkaMessageConsumer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-topic", "my-group-id")
+                        .AddEvent<OrderCreatedEvent>("my-topic", "my-batch-group-id")
                     )
                 );
 

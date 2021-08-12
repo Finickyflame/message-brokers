@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MessageBrokers.Kafka.Configurations
 {
@@ -12,8 +13,11 @@ namespace MessageBrokers.Kafka.Configurations
             this._services = services;
         }
 
-        public ConsumerConfiguration<TMessage> GetConfiguration<TMessage>()
+        public bool TryGetConfiguration<TMessage>([NotNullWhen(true)] out ConsumerConfiguration<TMessage>? configuration)
             where TMessage : IMessage
-            => this._services.GetRequiredService<ConsumerConfiguration<TMessage>>();
+        {
+            configuration = this._services.GetService<ConsumerConfiguration<TMessage>>();
+            return configuration != null;
+        }
     }
 }

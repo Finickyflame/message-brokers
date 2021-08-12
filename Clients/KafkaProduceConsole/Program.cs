@@ -2,7 +2,7 @@
 using KafkaProduceConsole.Events;
 using KafkaProduceConsole.Options;
 using KafkaProduceConsole.Tasks;
-using MessageBrokers;
+using MessageBrokers.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;

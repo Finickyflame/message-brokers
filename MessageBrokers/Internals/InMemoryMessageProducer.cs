@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
-    internal sealed class InMemoryMessageProducer : IInternalMessageProducer
+    internal sealed class InMemoryMessageProducer : IMessageProducer
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 

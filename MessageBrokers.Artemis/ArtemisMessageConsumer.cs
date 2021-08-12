@@ -1,33 +1,40 @@
 ﻿using ActiveMQ.Artemis.Client;
-using MessageBrokers.Configurations;
-using MessageBrokers.Internals;
+using MessageBrokers.Artemis.Configurations;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MessageBrokers
+namespace MessageBrokers.Artemis
 {
-    internal sealed class ArtemisMessageConsumer : IInternalMessageConsumer
+    internal sealed class ArtemisMessageConsumer : MessageConsumer
     {
         private readonly IConnection _connection;
         private readonly ConsumerConfigurationCollection _configurationCollection;
 
-        public ArtemisMessageConsumer(IConnection  connection, ConsumerConfigurationCollection configurationCollection)
+        public ArtemisMessageConsumer(IMessageConsumer @base, IConnection  connection, ConsumerConfigurationCollection configurationCollection)
+            :base(@base)
         {
             this._connection = connection;
             this._configurationCollection = configurationCollection;
         }
         
-        public async Task<TMessage> ConsumeAsync<TMessage>(CancellationToken cancellationToken = default) where TMessage : IMessage, new()
+        public override async Task<TMessage> ConsumeAsync<TMessage>(CancellationToken cancellationToken = default)
         {
-            ConsumerConfiguration<TMessage> configuration = this._configurationCollection.GetConfiguration<TMessage>();
+            if (!this._configurationCollection.TryGetConfiguration(out ConsumerConfiguration<TMessage>? configuration))
+            {
+                return await base.ConsumeAsync<TMessage>(cancellationToken);
+            }
+
             IConsumer consumer = await this._connection.CreateConsumerAsync(configuration.Configuration, cancellationToken);
             Message message = await consumer.ReceiveAsync(cancellationToken);
             return configuration.ConvertMessage(message);
         }
 
-        public Task CommitAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public override async Task CommitAsync<TMessage>(TMessage message)
         {
-            return Task.CompletedTask;
+            if (!this._configurationCollection.TryGetConfiguration(out ConsumerConfiguration<TMessage>? _))
+            {
+                await base.CommitAsync(message);
+            }
         }
     }
 }

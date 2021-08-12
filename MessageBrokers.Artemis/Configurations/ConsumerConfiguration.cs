@@ -1,6 +1,6 @@
 using ActiveMQ.Artemis.Client;
 
-namespace MessageBrokers.Configurations
+namespace MessageBrokers.Artemis.Configurations
 {
     internal class ConsumerConfiguration<TMessage> where TMessage : IMessage
     {

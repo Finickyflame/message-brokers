@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using MessageBrokers.Internals;
 using MessageBrokers.Kafka.Configurations;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MessageBrokers.Kafka
 {
-    internal sealed class KafkaMessageConsumer : IInternalMessageConsumer, IDisposable
+    internal sealed class KafkaMessageConsumer : MessageConsumer, IDisposable
     {
         private readonly ConsumerConfigurationProvider _configurationProvider;
         private readonly KafkaMessageConsumerResultCollection _resultCollection;
@@ -17,42 +16,51 @@ namespace MessageBrokers.Kafka
         private readonly Dictionary<Type, IConsumer<string, string>> _cachedConsumers = new();
 
         public KafkaMessageConsumer(
-            ConsumerConfigurationProvider configurationProvider, 
-            KafkaMessageConsumerResultCollection resultCollection, 
+            IMessageConsumer @base,
+            ConsumerConfigurationProvider configurationProvider,
+            KafkaMessageConsumerResultCollection resultCollection,
             KafkaMessageConverter kafkaMessageConverter)
+            : base(@base)
         {
             this._configurationProvider = configurationProvider;
             this._resultCollection = resultCollection;
             this._kafkaMessageConverter = kafkaMessageConverter;
         }
 
-        public Task<TMessage> ConsumeAsync<TMessage>(CancellationToken cancellationToken = default) where TMessage : IMessage, new()
+        public override async Task<TMessage> ConsumeAsync<TMessage>(CancellationToken cancellationToken = default)
         {
-            // We get the configuration outside, so its exception can be thrown outside the task.
-            ConsumerConfiguration<TMessage> configuration = this._configurationProvider.GetConfiguration<TMessage>();
-            return Task.Run(() =>
+            if (!this._configurationProvider.TryGetConfiguration(out ConsumerConfiguration<TMessage>? configuration))
+            {
+                return await base.ConsumeAsync<TMessage>(cancellationToken);
+            }
+
+            return await Task.Run(() =>
             {
                 IConsumer<string, string> consumer = this.CreateConsumer(configuration);
                 ConsumeResult<string, string> consumeResult = consumer.Consume(cancellationToken);
-                
+
                 TMessage message = this._kafkaMessageConverter.ConvertMessage(consumeResult, configuration);
                 this._resultCollection.Add(message, consumeResult);
                 return message;
             }, cancellationToken);
         }
 
-        public Task CommitAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public override async Task CommitAsync<TMessage>(TMessage message)
         {
+            if (!this._configurationProvider.TryGetConfiguration(out ConsumerConfiguration<TMessage>? configuration))
+            {
+                await base.CommitAsync(message);
+                return;
+            }
+            
             if (this._resultCollection.TryGet(message, out ConsumeResult<string, string>? consumeResult))
             {
-                ConsumerConfiguration<TMessage> configuration = this._configurationProvider.GetConfiguration<TMessage>();
                 IConsumer<string, string> consumer = this.CreateConsumer(configuration);
                 consumer.Commit(consumeResult);
             }
-            return Task.CompletedTask;
         }
 
-        private  IConsumer<string, string> CreateConsumer<TMessage>(ConsumerConfiguration<TMessage> configuration) where TMessage : IMessage
+        private IConsumer<string, string> CreateConsumer<TMessage>(ConsumerConfiguration<TMessage> configuration) where TMessage : IMessage
         {
             if (!this._cachedConsumers.TryGetValue(typeof(TMessage), out IConsumer<string, string>? consumer))
             {
@@ -62,6 +70,7 @@ namespace MessageBrokers.Kafka
                 AssignOffSets(consumer, configuration.TimeStamp, configuration.Timeout);
                 this._cachedConsumers.Add(typeof(TMessage), consumer);
             }
+
             return consumer;
         }
 

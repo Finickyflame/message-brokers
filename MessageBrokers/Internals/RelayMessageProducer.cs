@@ -1,23 +1,24 @@
-using Events.Internals;
+using Events;
 using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
-    internal sealed class RelayMessageProducer : IMessageProducer
+    internal sealed class RelayMessageProducer : MessageProducer
     {
-        private readonly IInternalEventDispatcher _eventDispatcher;
-        private readonly IInternalMessageProducer _messageProducer;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public RelayMessageProducer(IInternalEventDispatcher eventDispatcher, IInternalMessageProducer messageProducer)
+        /// <param name="messageProducer">Must be the <see cref="InMemoryMessageProducer"/> otherwise we will end in an infinite resolution loop.</param>
+        /// <param name="eventDispatcher">Must be the <see cref="InMemoryEventDispatcher"/> otherwise we will end in an infinite resolution loop.</param>
+        public RelayMessageProducer(InMemoryMessageProducer messageProducer, InMemoryEventDispatcher eventDispatcher)
+            : base(messageProducer)
         {
             this._eventDispatcher = eventDispatcher;
-            this._messageProducer = messageProducer;
         }
 
-        public async Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public override async Task PublishAsync<TMessage>(TMessage message)
         {
-            await this._messageProducer.PublishAsync(message);
-            await this._eventDispatcher.PublishAsync(message.Value.GetType(), message.Value);
+            await this._eventDispatcher.PublishAsync((dynamic)message.Value);
+            await base.PublishAsync(message);
         }
     }
 }

@@ -6,11 +6,11 @@ namespace MessageBrokers.Internals
 {
     internal class BackgroundMessageService<TMessage> : BackgroundService where TMessage : IMessage, new()
     {
-        private readonly IInternalMessageConsumer _messageConsumer;
+        private readonly IMessageConsumer _messageConsumer;
         private readonly IMessageProducer _messageProducer;
 
         
-        internal BackgroundMessageService(IInternalMessageConsumer messageConsumer, IMessageProducer messageProducer)
+        internal BackgroundMessageService(IMessageConsumer messageConsumer, IMessageProducer messageProducer)
         {
             // todo: validate internal vs external interfaces
             this._messageConsumer = messageConsumer;

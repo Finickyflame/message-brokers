@@ -1,26 +1,31 @@
 ﻿using ActiveMQ.Artemis.Client;
-using MessageBrokers.Configurations;
+using MessageBrokers.Artemis.Configurations;
 using System.Threading.Tasks;
 
-namespace MessageBrokers
+namespace MessageBrokers.Artemis
 {
-    internal sealed class ArtemisMessageProducer : IMessageProducer
+    internal sealed class ArtemisMessageProducer : MessageProducer
     {
         private readonly IConnection _connection;
-        private readonly DispatcherConfigurationCollection _configurationCollection;
+        private readonly ProducerConfigurationCollection _configurationCollection;
 
-        public ArtemisMessageProducer(IConnection connection, DispatcherConfigurationCollection configurationCollection)
+        public ArtemisMessageProducer(IMessageProducer @base, IConnection connection, ProducerConfigurationCollection configurationCollection)
+            : base(@base)
         {
             this._connection = connection;
             this._configurationCollection = configurationCollection;
         }
 
-        public async Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public override async Task PublishAsync<TMessage>(TMessage message)
         {
-            if (this._configurationCollection.TryGetConfiguration(out DispatcherConfiguration<TMessage> configuration))
+            if (this._configurationCollection.TryGetConfiguration(out ProducerConfiguration<TMessage> configuration))
             {
                 IProducer producer = await this._connection.CreateProducerAsync(configuration.Configuration);
                 await producer.SendAsync(configuration.ConvertMessage(message));
+            }
+            else
+            {
+                await base.PublishAsync(message);
             }
         }
     }

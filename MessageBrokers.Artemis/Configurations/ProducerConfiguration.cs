@@ -1,8 +1,8 @@
 using ActiveMQ.Artemis.Client;
 
-namespace MessageBrokers.Configurations
+namespace MessageBrokers.Artemis.Configurations
 {
-    internal class DispatcherConfiguration<TMessage> where TMessage : IMessage
+    internal class ProducerConfiguration<TMessage> where TMessage : IMessage
     {
         public ProducerConfiguration Configuration { get; set; }
 

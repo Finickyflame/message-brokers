@@ -23,7 +23,7 @@ namespace MessageBrokers.Kafka
         public Message<string, string> ConvertMessage<TMessage>(TMessage message, ProducerConfiguration<TMessage> configuration)
             where TMessage : IMessage
         {
-            string value = JsonSerializer.Serialize(message.Value, typeof(TMessage).GetGenericArguments().First(), configuration.SerializerOptions)!;
+            string value = JsonSerializer.Serialize(message.Value, typeof(TMessage).GetGenericArguments().First(), configuration.SerializerOptions);
             return new Message<string, string>
             {
                 Key = message.Key,

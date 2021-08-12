@@ -3,6 +3,7 @@ using System.Text.Json;
 
 namespace MessageBrokers.Kafka.Configurations
 {
+    // ReSharper disable once UnusedTypeParameter
     public class ProducerConfiguration<TMessage> where TMessage : IMessage
     {
         internal ProducerConfiguration(ClientConfig clientConfig, JsonSerializerOptions serializerOptions, string topic)
