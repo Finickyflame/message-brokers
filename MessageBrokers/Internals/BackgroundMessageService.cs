@@ -12,7 +12,6 @@ namespace MessageBrokers.Internals
         
         internal BackgroundMessageService(IMessageConsumer messageConsumer, IMessageProducer messageProducer)
         {
-            // todo: validate internal vs external interfaces
             this._messageConsumer = messageConsumer;
             this._messageProducer = messageProducer;
         }
@@ -26,7 +25,7 @@ namespace MessageBrokers.Internals
                 var message = await this._messageConsumer.ConsumeAsync<TMessage>(stoppingToken);
 
                 await this._messageProducer.PublishAsync(message);
-                //await this._messageConsumer.CommitAsync(message);
+                await this._messageConsumer.CommitAsync(message);
             }
         }
     }
