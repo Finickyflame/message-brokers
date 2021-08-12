@@ -11,9 +11,9 @@ namespace MessageBrokers
 {
     public static class KafkaExtensions
     {
-        public static IServiceCollection AddKafkaMessageDispatcher(this IServiceCollection services, Action<DispatcherConfigurationBuilder> configure)
+        public static IServiceCollection AddKafkaMessageProducer(this IServiceCollection services, Action<ProducerConfigurationBuilder> configure)
         {
-            var builder = new DispatcherConfigurationBuilder(services);
+            var builder = new ProducerConfigurationBuilder(services);
             configure(builder);
             services.TryAddSingleton<ProducerConfigurationProvider>();
             return services

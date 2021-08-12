@@ -1,11 +1,11 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "KafkaDemo": {
+    "KafkaProduceConsole": {
       "commandName": "Project",
-      "commandLineArgs": "runtask=ConsumeOrdersCreatedTask",
+      "commandLineArgs": "runtask=ProduceOrdersCreatedTask ProduceCount=10",
       "environmentVariables": {
-        "Environment": "Development"
+        "DOTNET_ENVIRONMENT": "Development"
       }
     }
   }

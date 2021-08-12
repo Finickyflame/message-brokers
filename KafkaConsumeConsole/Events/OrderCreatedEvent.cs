@@ -1,6 +1,6 @@
 ﻿using Events;
 
-namespace KafkaHostDemo.Events
+namespace KafkaConsumeConsole.Events
 {
     public record OrderCreatedEvent : IEvent
     {
@@ -19,6 +19,6 @@ namespace KafkaHostDemo.Events
 
         public string State { get; set; }
 
-        public long Zipcode { get; set; }
+        public string Zipcode { get; set; }
     }
 }

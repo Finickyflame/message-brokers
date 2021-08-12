@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace MessageBrokers.Kafka.Configurations
 {
-    public class DispatcherConfigurationBuilder
+    public class ProducerConfigurationBuilder
     {
-        public DispatcherConfigurationBuilder(IServiceCollection services)
+        public ProducerConfigurationBuilder(IServiceCollection services)
         {
             this.Services = services;
             this.SerializerOptions = new JsonSerializerOptions
@@ -28,7 +28,7 @@ namespace MessageBrokers.Kafka.Configurations
         /// <param name="configure"></param>
         /// <typeparam name="TEvent"></typeparam>
         /// <returns></returns>
-        public DispatcherConfigurationBuilder AddEvent<TEvent>(string topic, Action<ProducerConfiguration<Message<TEvent>>>? configure = null) 
+        public ProducerConfigurationBuilder AddEvent<TEvent>(string topic, Action<ProducerConfiguration<Message<TEvent>>>? configure = null) 
             where TEvent : IEvent
         {
             return this.AddMessage(topic, configure);
@@ -41,7 +41,7 @@ namespace MessageBrokers.Kafka.Configurations
         /// <param name="configure"></param>
         /// <typeparam name="TMessage"></typeparam>
         /// <returns></returns>
-        public DispatcherConfigurationBuilder AddMessage<TMessage>(string topic, Action<ProducerConfiguration<TMessage>>? configure = null) where TMessage : IMessage
+        public ProducerConfigurationBuilder AddMessage<TMessage>(string topic, Action<ProducerConfiguration<TMessage>>? configure = null) where TMessage : IMessage
         {
             this.Services.AddSingleton(services =>
             {
@@ -56,7 +56,7 @@ namespace MessageBrokers.Kafka.Configurations
             return this;
         }
 
-        public DispatcherConfigurationBuilder ConfigureSerializerOptions(Action<JsonSerializerOptions> configure)
+        public ProducerConfigurationBuilder ConfigureSerializerOptions(Action<JsonSerializerOptions> configure)
         {
             configure(this.SerializerOptions);
             return this;

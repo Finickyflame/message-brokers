@@ -8,13 +8,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBrokers.Artemis", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events", "Events\Events.csproj", "{17F9A7C9-2D18-4345-828C-A56F892AE46F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsoleDemo", "KafkaConsoleDemo\KafkaConsoleDemo.csproj", "{F39F7C92-AC51-45D9-AC4B-A469021124D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeConsole", "KafkaConsumeConsole\KafkaConsumeConsole.csproj", "{F39F7C92-AC51-45D9-AC4B-A469021124D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Common", "Hosting.Common\Hosting.Common.csproj", "{1A2EDE28-E8D9-4D81-9AEA-1B1973E09F80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaHostDemo", "KafkaHostDemo\KafkaHostDemo.csproj", "{8EFBAF82-D93E-45C8-9A50-1905B477215E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeWorker", "KafkaConsumeWorker\KafkaConsumeWorker.csproj", "{8EFBAF82-D93E-45C8-9A50-1905B477215E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProduceConsole", "KafkaProduceConsole\KafkaProduceConsole.csproj", "{F1292852-082C-4D10-BB44-7A57B15DB634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,10 +52,15 @@ Global
 		{8EFBAF82-D93E-45C8-9A50-1905B477215E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EFBAF82-D93E-45C8-9A50-1905B477215E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EFBAF82-D93E-45C8-9A50-1905B477215E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1292852-082C-4D10-BB44-7A57B15DB634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1292852-082C-4D10-BB44-7A57B15DB634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1292852-082C-4D10-BB44-7A57B15DB634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1292852-082C-4D10-BB44-7A57B15DB634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F39F7C92-AC51-45D9-AC4B-A469021124D0} = {C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}
 		{1A2EDE28-E8D9-4D81-9AEA-1B1973E09F80} = {C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}
 		{8EFBAF82-D93E-45C8-9A50-1905B477215E} = {C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}
+		{F1292852-082C-4D10-BB44-7A57B15DB634} = {C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}
 	EndGlobalSection
 EndGlobal

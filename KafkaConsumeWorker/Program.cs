@@ -1,10 +1,10 @@
 ﻿using Events;
-using KafkaHostDemo.Events;
+using KafkaConsumeWorker.Events;
 using MessageBrokers;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace KafkaHostDemo
+namespace KafkaConsumeWorker
 {
     public static class Program
     {
@@ -18,7 +18,7 @@ namespace KafkaHostDemo
                 .ConfigureServices(services => services
                     .AddEventHandler<OrderCreatedEvent, ImpairedChangedEventHandler>()
                     .AddKafkaMessageConsumer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-group-id", "my-topic")
+                        .AddEvent<OrderCreatedEvent>("my-topic", "my-group-id")
                     )
                 );
 

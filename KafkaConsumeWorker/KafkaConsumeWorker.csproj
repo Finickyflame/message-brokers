@@ -3,8 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>KafkaConsoleDemo</RootNamespace>
-    <UserSecretsId>732c10c7-57af-44d8-ba00-2a25d2adf476</UserSecretsId>
+    <UserSecretsId>bab52282-7918-4589-ab2e-5d27f6f8367e</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hosting.Common\Hosting.Common.csproj" />

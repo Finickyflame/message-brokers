@@ -1,6 +1,6 @@
 ﻿using Events;
 
-namespace KafkaConsoleDemo.Events
+namespace KafkaProduceConsole.Events
 {
     public record OrderCreatedEvent : IEvent
     {
@@ -10,7 +10,7 @@ namespace KafkaConsoleDemo.Events
 
         public string Itemid { get; set; }
 
-        public Address Address { get; set; }
+        public Address Address { get; set; } = new();
     }
 
     public record Address
@@ -19,6 +19,6 @@ namespace KafkaConsoleDemo.Events
 
         public string State { get; set; }
 
-        public long Zipcode { get; set; }
+        public string Zipcode { get; set; }
     }
 }

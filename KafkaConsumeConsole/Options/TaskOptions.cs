@@ -1,6 +1,6 @@
 using System;
 
-namespace KafkaConsoleDemo.Options
+namespace KafkaConsumeConsole.Options
 {
     public record TaskOptions
     {

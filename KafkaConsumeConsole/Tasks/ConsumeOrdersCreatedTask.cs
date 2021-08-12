@@ -1,5 +1,5 @@
-﻿using KafkaConsoleDemo.Events;
-using KafkaConsoleDemo.Options;
+﻿using KafkaConsumeConsole.Events;
+using KafkaConsumeConsole.Options;
 using MessageBrokers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace KafkaConsoleDemo.Tasks
+namespace KafkaConsumeConsole.Tasks
 {
     public class ConsumeOrdersCreatedTask : IApplicationTask
     {

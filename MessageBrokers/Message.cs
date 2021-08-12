@@ -12,7 +12,7 @@ namespace MessageBrokers
 
         public Message(TEvent value)
         {
-            this.Key = string.Empty;
+            this.Key = null;
             this.Value = value;
         }
 

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MessageBrokers
 {
-    public static class Extensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddMessageHandler<TMessageHandler, TMessage>(this IServiceCollection services)
             where TMessage : IMessage

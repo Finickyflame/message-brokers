@@ -1,12 +1,12 @@
-﻿using KafkaConsoleDemo.Events;
-using KafkaConsoleDemo.Options;
-using KafkaConsoleDemo.Tasks;
+﻿using KafkaConsumeConsole.Events;
+using KafkaConsumeConsole.Options;
+using KafkaConsumeConsole.Tasks;
 using MessageBrokers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace KafkaConsoleDemo
+namespace KafkaConsumeConsole
 {
     public static class Program
     {
@@ -21,7 +21,7 @@ namespace KafkaConsoleDemo
                     .AddTransient<IApplicationTask, ConsumeOrdersCreatedTask>()
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration("kafka"))
                     .AddKafkaMessageConsumer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-group-id", "my-topic")
+                        .AddEvent<OrderCreatedEvent>("my-topic", "my-group-id")
                     )
                 );
 

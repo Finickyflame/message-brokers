@@ -6,7 +6,7 @@ namespace MessageBrokers.Kafka.Configurations
 {
     public record ConsumerConfiguration<TMessage> where TMessage : IMessage
     {
-        public ConsumerConfiguration(ClientConfig clientConfig, JsonSerializerOptions serializerOptions, string groupId, string topic)
+        public ConsumerConfiguration(ClientConfig clientConfig, JsonSerializerOptions serializerOptions, string topic, string groupId)
         {
             this.KafkaConfig = new ConsumerConfig(clientConfig)
             {

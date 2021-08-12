@@ -2,7 +2,7 @@ using Events;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace KafkaHostDemo.Events
+namespace KafkaConsumeWorker.Events
 {
     public class ImpairedChangedEventHandler : IEventHandler<OrderCreatedEvent>
     {
