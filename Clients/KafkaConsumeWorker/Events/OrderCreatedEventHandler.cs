@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace KafkaConsumeWorker.Events
 {
-    public class ImpairedChangedEventHandler : IEventHandler<OrderCreatedEvent>
+    public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
     {
-        private readonly ILogger<ImpairedChangedEventHandler> _logger;
+        private readonly ILogger<OrderCreatedEventHandler> _logger;
 
-        public ImpairedChangedEventHandler(ILogger<ImpairedChangedEventHandler> logger)
+        public OrderCreatedEventHandler(ILogger<OrderCreatedEventHandler> logger)
         {
             this._logger = logger;
         }

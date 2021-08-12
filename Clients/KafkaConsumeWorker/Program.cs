@@ -16,7 +16,7 @@ namespace KafkaConsumeWorker
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddEventHandler<OrderCreatedEvent, ImpairedChangedEventHandler>()
+                    .AddEventHandler<OrderCreatedEvent, OrderCreatedEventHandler>()
                     .AddKafkaMessageConsumer(options => options
                         .AddEvent<OrderCreatedEvent>("my-topic", "my-worker-group-id")
                     )
