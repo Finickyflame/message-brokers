@@ -4,13 +4,13 @@ using System.Text.Json;
 namespace MessageBrokers.Kafka.Configurations
 {
     // ReSharper disable once UnusedTypeParameter
-    public class ProducerConfiguration<TMessage> where TMessage : IMessage
+    public class KafkaProducerOptions<TMessage> where TMessage : IMessage
     {
-        internal ProducerConfiguration(ClientConfig clientConfig, JsonSerializerOptions serializerOptions, string topic)
+        internal KafkaProducerOptions(string topic, ProducerConfig producerConfig, JsonSerializerOptions serializerOptions)
         {
-            this.KafkaConfig = new ProducerConfig(clientConfig);
-            this.SerializerOptions = serializerOptions;
             this.Topic = topic;
+            this.KafkaConfig = new ProducerConfig(producerConfig);
+            this.SerializerOptions = new JsonSerializerOptions(serializerOptions);
         }
         
         public ProducerConfig KafkaConfig { get; }

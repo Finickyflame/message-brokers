@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hosting.Common
 {
+    [Decorator]
     public sealed class ApplicationTaskLogger : IApplicationTask
     {
         private readonly IApplicationTask _base;

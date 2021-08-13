@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeWorker", "Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProduceConsole", "Clients\KafkaProduceConsole\KafkaProduceConsole.csproj", "{F1292852-082C-4D10-BB44-7A57B15DB634}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.Options", "Extensions.Options\Extensions.Options.csproj", "{CE8F2E14-ACAD-4DDF-A535-5204493A243B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{F1292852-082C-4D10-BB44-7A57B15DB634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1292852-082C-4D10-BB44-7A57B15DB634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1292852-082C-4D10-BB44-7A57B15DB634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8F2E14-ACAD-4DDF-A535-5204493A243B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8F2E14-ACAD-4DDF-A535-5204493A243B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8F2E14-ACAD-4DDF-A535-5204493A243B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8F2E14-ACAD-4DDF-A535-5204493A243B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F39F7C92-AC51-45D9-AC4B-A469021124D0} = {C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}

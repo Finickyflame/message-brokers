@@ -1,6 +1,5 @@
 ﻿using KafkaConsumeConsole.Events;
 using KafkaConsumeConsole.Options;
-using KafkaConsumeConsole.Tasks;
 using MessageBrokers.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,13 +17,11 @@ namespace KafkaConsumeConsole
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddApplicationTask<ConsumeOrdersCreatedTask>()
+                    .AddApplicationTasks()
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration("kafka"))
                     .AddKafkaMessageConsumer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-topic", "my-batch-group-id")
+                        .AddEvent<OrderCreatedEvent>(topic: "topic-order-created", groupId: "batch-group-id")
                     )
                 );
-
-       
     }
 }

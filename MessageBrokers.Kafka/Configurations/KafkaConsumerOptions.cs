@@ -1,19 +1,19 @@
 using Confluent.Kafka;
+using MessageBrokers.Extending;
 using System;
 using System.Text.Json;
 
 namespace MessageBrokers.Kafka.Configurations
 {
     // ReSharper disable once UnusedTypeParameter
-    public record ConsumerConfiguration<TMessage> where TMessage : IMessage
+    public record KafkaConsumerOptions<TMessage> : IConsumerOptions<TMessage> 
+        where TMessage : IMessage
     {
-        public ConsumerConfiguration(ClientConfig clientConfig, JsonSerializerOptions serializerOptions, string topic, string groupId)
+        public KafkaConsumerOptions(string topic, string groupId, ConsumerConfig consumerConfig, JsonSerializerOptions serializerOptions)
         {
-            this.KafkaConfig = new ConsumerConfig(clientConfig)
+            this.KafkaConfig = new ConsumerConfig(consumerConfig)
             {
-                GroupId = groupId,
-                EnableAutoCommit = false,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                GroupId = groupId
             };
             this.SerializerOptions = new JsonSerializerOptions(serializerOptions);
             this.Topic = topic;

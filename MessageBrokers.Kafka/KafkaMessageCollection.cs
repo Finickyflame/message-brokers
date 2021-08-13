@@ -5,12 +5,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MessageBrokers.Kafka
 {
-    internal class KafkaMessageConsumerResultCollection
+    internal class KafkaMessageCollection
     {
-        private readonly ILogger<KafkaMessageConsumerResultCollection> _logger;
+        private readonly ILogger<KafkaMessageCollection> _logger;
         private readonly Dictionary<IMessage, ConsumeResult<string, string>> _results = new();
 
-        public KafkaMessageConsumerResultCollection(ILogger<KafkaMessageConsumerResultCollection> logger)
+        public KafkaMessageCollection(ILogger<KafkaMessageCollection> logger)
         {
             this._logger = logger;
         }

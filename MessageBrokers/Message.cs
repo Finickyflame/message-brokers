@@ -22,9 +22,9 @@ namespace MessageBrokers
             this.Value = value;
         }
 
-        public string Key { get; init; }
+        public string? Key { get; init; }
         
-        public DateTimeOffset CreatedOn { get; init; }
+        public DateTimeOffset? CreatedOn { get; init; }
 
         public TEvent Value { get; init; }
 

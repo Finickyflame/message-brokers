@@ -2,9 +2,9 @@ using Confluent.Kafka;
 
 namespace MessageBrokers.Kafka.Configurations
 {
-    public record SecurityConfiguration
+    public record KafkaSecurityOptions
     {
-        public SecurityConfiguration(ClientConfig kafkaConfig)
+        public KafkaSecurityOptions(ClientConfig kafkaConfig)
         {
             this.KafkaConfig = kafkaConfig;
         }

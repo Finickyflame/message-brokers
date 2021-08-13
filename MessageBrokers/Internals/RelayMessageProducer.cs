@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
+    // todo: implements Extending.IMessageProducer and figure out how to not have an infinite resolution loop with the new behavior    
     internal sealed class RelayMessageProducer : MessageProducer
     {
         private readonly IEventDispatcher _eventDispatcher;

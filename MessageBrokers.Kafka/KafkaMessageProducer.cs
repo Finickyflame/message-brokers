@@ -1,55 +1,40 @@
 ﻿using Confluent.Kafka;
+using MessageBrokers.Extending;
 using MessageBrokers.Kafka.Configurations;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MessageBrokers.Kafka
 {
-    internal sealed class KafkaMessageProducer : MessageProducer, IDisposable
+    internal sealed class KafkaMessageProducer<TMessage> : IMessageProducer<TMessage>, IDisposable
+        where TMessage : IMessage, new()
     {
-        private readonly ProducerConfigurationProvider _configurationProvider;
-        private readonly KafkaMessageConverter _messageConverter;
-        private readonly Dictionary<Type, IProducer<string, string>> _cachedProducers = new();
+        private readonly KafkaProducerOptions<TMessage> _options;
+        private readonly KafkaMessageConverter<TMessage> _converter;
+        private readonly IProducer<string?, string> _producer;
 
-        public KafkaMessageProducer(IMessageProducer @base, ProducerConfigurationProvider configurationProvider, KafkaMessageConverter messageConverter)
-            : base(@base)
+        public KafkaMessageProducer(IOptions<KafkaProducerOptions<TMessage>> options, KafkaMessageConverter<TMessage> converter)
         {
-            this._configurationProvider = configurationProvider;
-            this._messageConverter = messageConverter;
+            this._options = options.Value;
+            this._converter = converter;
+            this._producer = CreateProducer(this._options);
         }
 
-        public override async Task PublishAsync<TMessage>(TMessage message)
+        public async Task PublishAsync(TMessage message)
         {
-            if (this._configurationProvider.TryGetConfiguration(out ProducerConfiguration<TMessage>? configuration))
-            {
-                IProducer<string, string> producer = this.CreateProducer(configuration);
-                await producer.ProduceAsync(configuration.Topic, this._messageConverter.ConvertMessage(message, configuration));
-            }
-            else
-            {
-                await base.PublishAsync(message);
-            }
+            await this._producer.ProduceAsync(this._options.Topic, this._converter.ConvertMessage(message));
         }
 
-        private IProducer<string, string> CreateProducer<TMessage>(ProducerConfiguration<TMessage> configuration) where TMessage : IMessage
+        private static IProducer<string?, string> CreateProducer(KafkaProducerOptions<TMessage> options)
         {
-            if (!this._cachedProducers.TryGetValue(typeof(TMessage), out IProducer<string, string>? producer))
-            {
-                producer = new ProducerBuilder<string, string>(configuration.KafkaConfig).Build();
-                this._cachedProducers.Add(typeof(TMessage), producer);
-            }
-
-            return producer;
+            return new Confluent.Kafka.ProducerBuilder<string?, string>(options.KafkaConfig).Build();
         }
 
         public void Dispose()
         {
-            foreach (var producer in this._cachedProducers.Values)
-            {
-                producer.Flush();
-                producer.Dispose();
-            }
+            this._producer.Flush();
+            this._producer.Dispose();
         }
     }
 }

@@ -16,12 +16,11 @@ namespace KafkaConsumeWorker
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddEventHandler<OrderCreatedEvent, OrderCreatedEventHandler>()
+                    .AddEventHandlers()
                     .AddKafkaMessageConsumer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-topic", "my-worker-group-id")
+                        .AddEvent<OrderCreatedEvent>(topic: "topic-order-created", groupId: "worker-group-id")
+                        .AddEvent<OrderCanceledEvent>(topic: "topic-order-canceled", groupId: "worker-group-id")
                     )
                 );
-
-       
     }
 }

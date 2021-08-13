@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
+using MessageBrokers.Extending;
 using MessageBrokers.Kafka.Configurations;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,69 +10,46 @@ using System.Threading.Tasks;
 
 namespace MessageBrokers.Kafka
 {
-    internal sealed class KafkaMessageConsumer : MessageConsumer, IDisposable
+    internal sealed class KafkaMessageConsumer<TMessage> : IMessageConsumer<TMessage>, IDisposable
+        where TMessage : IMessage, new()
     {
-        private readonly ConsumerConfigurationProvider _configurationProvider;
-        private readonly KafkaMessageConsumerResultCollection _resultCollection;
-        private readonly KafkaMessageConverter _kafkaMessageConverter;
-        private readonly Dictionary<Type, IConsumer<string, string>> _cachedConsumers = new();
+        private readonly IConsumer<string, string> _consumer;
+        private readonly KafkaMessageCollection _messages;
+        private readonly KafkaMessageConverter<TMessage> _converter;
 
         public KafkaMessageConsumer(
-            IMessageConsumer @base,
-            ConsumerConfigurationProvider configurationProvider,
-            KafkaMessageConsumerResultCollection resultCollection,
-            KafkaMessageConverter kafkaMessageConverter)
-            : base(@base)
+            IOptions<KafkaConsumerOptions<TMessage>> options,
+            KafkaMessageCollection messages,
+            KafkaMessageConverter<TMessage> converter)
         {
-            this._configurationProvider = configurationProvider;
-            this._resultCollection = resultCollection;
-            this._kafkaMessageConverter = kafkaMessageConverter;
+            this._consumer = CreateConsumer(options.Value);
+            this._messages = messages;
+            this._converter = converter;
         }
 
-        public override async Task<TMessage> ConsumeAsync<TMessage>(CancellationToken cancellationToken = default)
+        public async Task<TMessage> ConsumeAsync(CancellationToken cancellationToken = default) => await Task.Run(() =>
         {
-            if (!this._configurationProvider.TryGetConfiguration(out ConsumerConfiguration<TMessage>? configuration))
-            {
-                return await base.ConsumeAsync<TMessage>(cancellationToken);
-            }
+            ConsumeResult<string, string> consumeResult = this._consumer.Consume(cancellationToken);
 
-            return await Task.Run(() =>
-            {
-                IConsumer<string, string> consumer = this.CreateConsumer(configuration);
-                ConsumeResult<string, string> consumeResult = consumer.Consume(cancellationToken);
+            TMessage message = this._converter.ConvertMessage(consumeResult);
+            this._messages.Add(message, consumeResult);
+            return message;
+        }, cancellationToken);
 
-                TMessage message = this._kafkaMessageConverter.ConvertMessage(consumeResult, configuration);
-                this._resultCollection.Add(message, consumeResult);
-                return message;
-            }, cancellationToken);
-        }
-
-        public override async Task CommitAsync<TMessage>(TMessage message)
+        public async Task CommitAsync(TMessage message)
         {
-            if (!this._configurationProvider.TryGetConfiguration(out ConsumerConfiguration<TMessage>? configuration))
+            if (this._messages.TryGet(message, out ConsumeResult<string, string>? consumeResult))
             {
-                await base.CommitAsync(message);
-                return;
-            }
-            
-            if (this._resultCollection.TryGet(message, out ConsumeResult<string, string>? consumeResult))
-            {
-                IConsumer<string, string> consumer = this.CreateConsumer(configuration);
-                consumer.Commit(consumeResult);
+                await Task.Run(() => this._consumer.Commit(consumeResult)).ConfigureAwait(false);
             }
         }
 
-        private IConsumer<string, string> CreateConsumer<TMessage>(ConsumerConfiguration<TMessage> configuration) where TMessage : IMessage
+        private static IConsumer<string, string> CreateConsumer(KafkaConsumerOptions<TMessage> options)
         {
-            if (!this._cachedConsumers.TryGetValue(typeof(TMessage), out IConsumer<string, string>? consumer))
-            {
-                consumer = new ConsumerBuilder<string, string>(configuration.KafkaConfig).Build();
-                consumer.Subscribe(configuration.Topic);
+            IConsumer<string, string>? consumer = new Confluent.Kafka.ConsumerBuilder<string, string>(options.KafkaConfig).Build();
+            consumer.Subscribe(options.Topic);
 
-                AssignOffSets(consumer, configuration.TimeStamp, configuration.Timeout);
-                this._cachedConsumers.Add(typeof(TMessage), consumer);
-            }
-
+            AssignOffSets(consumer, options.TimeStamp, options.Timeout);
             return consumer;
         }
 
@@ -87,11 +66,8 @@ namespace MessageBrokers.Kafka
 
         public void Dispose()
         {
-            foreach (var consumer in this._cachedConsumers.Values)
-            {
-                consumer.Close();
-                consumer.Dispose();
-            }
+            this._consumer.Close();
+            this._consumer.Dispose();
         }
     }
 }

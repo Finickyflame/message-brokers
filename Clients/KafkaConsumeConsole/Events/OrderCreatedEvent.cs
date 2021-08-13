@@ -1,10 +1,11 @@
 ﻿using Events;
+using System;
 
 namespace KafkaConsumeConsole.Events
 {
     public record OrderCreatedEvent : IEvent
     {
-        public long OrderTime { get; set; }
+        public DateTimeOffset OrderTime { get; set; }
 
         public long OrderId { get; set; }
 

@@ -19,21 +19,25 @@ namespace KafkaProduceConsole
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddApplicationTask<ProduceOrdersCreatedTask>()
+                    .AddApplicationTasks()
                     .AddSingleton(_ => new Faker<Address>()
                         .RuleFor(address => address.City, faker => faker.Address.City())
                         .RuleFor(address => address.State, faker => faker.Address.State())
                         .RuleFor(address => address.Zipcode, faker => faker.Address.ZipCode())
                     )
                     .AddSingleton(service => new Faker<OrderCreatedEvent>()
-                        .RuleFor(order => order.Ordertime, faker => faker.Date.Recent().Ticks)
-                        .RuleFor(order => order.Orderid, faker => faker.Commerce.Random.Long())
-                        .RuleFor(order => order.Itemid, faker => faker.Commerce.Ean8())
+                        .RuleFor(order => order.OrderTime, faker => faker.Date.Recent())
+                        .RuleFor(order => order.OrderId, faker => faker.Commerce.Random.Long())
+                        .RuleFor(order => order.ItemId, faker => faker.Commerce.Ean8())
                         .RuleFor(order => order.Address, () => service.GetRequiredService<Faker<Address>>())
+                    )
+                    .AddSingleton(_ => new Faker<OrderCanceledEvent>()
+                        .RuleFor(order => order.OrderId, faker => faker.Commerce.Random.Long())
                     )
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration(string.Empty))
                     .AddKafkaMessageProducer(options => options
-                        .AddEvent<OrderCreatedEvent>("my-topic")
+                        .AddEvent<OrderCreatedEvent>(topic: "topic-order-created")
+                        .AddEvent<OrderCanceledEvent>(topic: "topic-order-canceled")
                     )
                 );
     }

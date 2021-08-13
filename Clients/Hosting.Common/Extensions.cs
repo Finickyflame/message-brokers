@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
@@ -36,6 +37,24 @@ namespace Microsoft.Extensions.Hosting
             return services;
         }
 
+        public static IServiceCollection AddApplicationTasks(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient, params Assembly[] assemblies)
+        {
+            if (assemblies.Length == 0)
+            {
+                assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            }
+            services.Scan(source => source
+                .FromAssemblies(assemblies)
+                .AddClasses(type => type
+                    .AssignableTo(typeof(IApplicationTask))
+                    .WithoutAttribute<DecoratorAttribute>()
+                )
+                .AsImplementedInterfaces()
+                .WithLifetime(serviceLifetime)
+            ).Decorate<IApplicationTask, ApplicationTaskLogger>();
+            return services;
+        }
+        
         public static IServiceCollection AddApplicationTask<TApplicationTask>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
             where TApplicationTask : IApplicationTask
         {
@@ -68,5 +87,10 @@ namespace Microsoft.Extensions.Hosting
 
             return true;
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class DecoratorAttribute : Attribute
+    {
     }
 }

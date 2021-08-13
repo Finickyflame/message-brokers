@@ -1,6 +1,6 @@
 namespace MessageBrokers.Artemis.Configurations
 {
-    public record SecurityConfiguration
+    public record ArtemisSecurityOptions
     {
         public string? Username { get; set; }
 

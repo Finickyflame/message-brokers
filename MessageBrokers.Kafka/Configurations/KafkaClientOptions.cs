@@ -2,12 +2,12 @@
 
 namespace MessageBrokers.Kafka.Configurations
 {
-    public record ClientConfiguration
+    public record KafkaClientOptions
     {
-        public ClientConfiguration()
+        public KafkaClientOptions()
         {
             this.KafkaConfig = new ClientConfig();
-            this.Security = new SecurityConfiguration(this.KafkaConfig);
+            this.Security = new KafkaSecurityOptions(this.KafkaConfig);
         }
 
         internal ClientConfig KafkaConfig { get; }
@@ -18,6 +18,6 @@ namespace MessageBrokers.Kafka.Configurations
             set => this.KafkaConfig.BootstrapServers = value;
         }
 
-        public SecurityConfiguration Security { get; internal set; }
+        public KafkaSecurityOptions Security { get; internal set; }
     }
 }

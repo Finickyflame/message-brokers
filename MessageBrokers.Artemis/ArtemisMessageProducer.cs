@@ -1,31 +1,35 @@
 ﻿using ActiveMQ.Artemis.Client;
 using MessageBrokers.Artemis.Configurations;
+using MessageBrokers.Extending;
+using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace MessageBrokers.Artemis
 {
-    internal sealed class ArtemisMessageProducer : MessageProducer
+    internal sealed class ArtemisMessageProducer<TMessage> : IMessageProducer<TMessage>, IAsyncDisposable
+        where TMessage : IMessage, new()
     {
-        private readonly IConnection _connection;
-        private readonly ProducerConfigurationCollection _configurationCollection;
+        private readonly ArtemisMessageConverter<TMessage> _converter;
+        private readonly Lazy<Task<IProducer>> _producer;
 
-        public ArtemisMessageProducer(IMessageProducer @base, IConnection connection, ProducerConfigurationCollection configurationCollection)
-            : base(@base)
+        public ArtemisMessageProducer(IConnection connection, IOptions<ArtemisProducerOptions<TMessage>> options, ArtemisMessageConverter<TMessage> converter)
         {
-            this._connection = connection;
-            this._configurationCollection = configurationCollection;
+            this._converter = converter;
+            this._producer = new Lazy<Task<IProducer>>(async () => await connection.CreateProducerAsync(options.Value.Configuration));
         }
 
-        public override async Task PublishAsync<TMessage>(TMessage message)
+        public async Task PublishAsync(TMessage message)
         {
-            if (this._configurationCollection.TryGetConfiguration(out ProducerConfiguration<TMessage> configuration))
+            IProducer producer = await this._producer.Value;
+            await producer.SendAsync(this._converter.ConvertMessage(message));
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (this._producer.IsValueCreated)
             {
-                IProducer producer = await this._connection.CreateProducerAsync(configuration.Configuration);
-                await producer.SendAsync(configuration.ConvertMessage(message));
-            }
-            else
-            {
-                await base.PublishAsync(message);
+                await (await this._producer.Value).DisposeAsync();
             }
         }
     }
