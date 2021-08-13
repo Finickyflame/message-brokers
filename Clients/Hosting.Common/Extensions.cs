@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Hosting.Common;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,19 @@ namespace Microsoft.Extensions.Hosting
             }
         }
 
+        public static IServiceCollection AddOptions<TOptions>(this IServiceCollection services, Action<OptionsBuilder<TOptions>> configure) where TOptions : class
+        {
+            configure(services.AddOptions<TOptions>());
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationTask<TApplicationTask>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
+            where TApplicationTask : IApplicationTask
+        {
+            services.Add(new ServiceDescriptor(typeof(IApplicationTask), typeof(TApplicationTask), serviceLifetime));
+            return services.Decorate<IApplicationTask, ApplicationTaskLogger>();
+        }
+
         private static async Task<bool> FindAndRunTask(IServiceProvider services)
         {
             var config = services.GetRequiredService<IConfiguration>();
@@ -51,13 +65,8 @@ namespace Microsoft.Extensions.Hosting
                 ILogger? logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger("CloudFoundryTasks");
                 logger?.LogError("No task with name {TaskName} is found registered in service container", taskName);
             }
+
             return true;
-        }
-        
-        public static IServiceCollection AddOptions<TOptions>(this IServiceCollection services, Action<OptionsBuilder<TOptions>> configure) where TOptions : class
-        {
-            configure(services.AddOptions<TOptions>());
-            return services;
         }
     }
 }

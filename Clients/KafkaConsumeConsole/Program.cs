@@ -18,7 +18,7 @@ namespace KafkaConsumeConsole
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddTransient<IApplicationTask, ConsumeOrdersCreatedTask>()
+                    .AddApplicationTask<ConsumeOrdersCreatedTask>()
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration("kafka"))
                     .AddKafkaMessageConsumer(options => options
                         .AddEvent<OrderCreatedEvent>("my-topic", "my-batch-group-id")

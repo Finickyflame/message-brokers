@@ -33,17 +33,11 @@ namespace KafkaProduceConsole.Tasks
 
         public async Task RunAsync()
         {
-            this._logger.LogInformation("{Task} started", nameof(ProduceOrdersCreatedTask));
-            var watch = Stopwatch.StartNew();
-
             foreach (OrderCreatedEvent @event in this._eventFactory.GenerateLazy(this._taskOptions.ProduceCount))
             {
                 await this._eventDispatcher.PublishAsync(@event);
                 this._logger.LogInformation("Event produced: {Event}", @event);
             }
-
-            watch.Stop();
-            this._logger.LogInformation("{Task} completed ({Duration}ms)", nameof(ProduceOrdersCreatedTask), watch.ElapsedMilliseconds);
         }
     }
 }

@@ -7,5 +7,7 @@ namespace KafkaConsumeConsole.Options
         public long ConsumeWaitDurationMs { get; set; } = 30000;
         
         public TimeSpan ConsumeWaitDuration => TimeSpan.FromMilliseconds(this.ConsumeWaitDurationMs);
+        
+        public bool AllowCommit { get; set; }
     }
 }

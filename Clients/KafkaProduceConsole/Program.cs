@@ -19,7 +19,7 @@ namespace KafkaProduceConsole
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services
-                    .AddTransient<IApplicationTask, ProduceOrdersCreatedTask>()
+                    .AddApplicationTask<ProduceOrdersCreatedTask>()
                     .AddSingleton(_ => new Faker<Address>()
                         .RuleFor(address => address.City, faker => faker.Address.City())
                         .RuleFor(address => address.State, faker => faker.Address.State())
