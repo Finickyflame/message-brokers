@@ -7,11 +7,4 @@
 
         TSecurityOptions Security { get; init; }
     }
-
-    public interface IClientSecurityOptions
-    {
-        string? Username { get; set; }
-
-        string? Password { get; set; }
-    }
 }
