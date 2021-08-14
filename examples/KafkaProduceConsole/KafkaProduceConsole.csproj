@@ -9,7 +9,7 @@
     <PackageReference Include="Bogus" Version="33.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hosting.Common\Hosting.Common.csproj" />
+    <ProjectReference Include="..\..\src\Hosting.Common\Hosting.Common.csproj" />
     <ProjectReference Include="..\..\src\MessageBrokers.Kafka\MessageBrokers.Kafka.csproj" />
   </ItemGroup>
 </Project>

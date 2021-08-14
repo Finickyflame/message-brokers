@@ -6,7 +6,7 @@
     <UserSecretsId>732c10c7-57af-44d8-ba00-2a25d2adf476</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hosting.Common\Hosting.Common.csproj" />
+    <ProjectReference Include="..\..\src\Hosting.Common\Hosting.Common.csproj" />
     <ProjectReference Include="..\..\src\MessageBrokers.Kafka\MessageBrokers.Kafka.csproj" />
   </ItemGroup>
 </Project>
