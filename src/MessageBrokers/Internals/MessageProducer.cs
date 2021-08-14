@@ -1,3 +1,4 @@
+using CQRS.Events;
 using CQRS.Events.Internals;
 using MessageBrokers.Extending;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
-    internal sealed class InternalMessageProducer : InternalEventDispatcher, IMessageProducer
+    internal sealed class MessageProducer : EventDispatcher, IMessageProducer
     {
-        public InternalMessageProducer(IServiceProvider services)
+        public MessageProducer(IServiceProvider services)
             : base(services)
         {
         }

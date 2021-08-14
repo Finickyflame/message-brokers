@@ -1,5 +1,4 @@
-﻿using Hosting.Common;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,10 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.Hosting
 {
-    public static class Extensions
+    public static class ServicesExtensions
     {
         /// <summary>
         /// Runs a web application, blocking the calling thread until the host shuts down.<para />
@@ -87,10 +85,5 @@ namespace Microsoft.Extensions.Hosting
 
             return true;
         }
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    public class DecoratorAttribute : Attribute
-    {
     }
 }

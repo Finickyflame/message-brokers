@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace Hosting.Common
+namespace Microsoft.Extensions.Hosting
 {
     [Decorator]
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
     public sealed class ApplicationTaskLogger : IApplicationTask
     {
         private readonly IApplicationTask _base;

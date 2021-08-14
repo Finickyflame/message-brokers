@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CQRS.Events.Internals
 {
-    internal class InMemoryEventDispatcher<TEvent> : IEventDispatcher<TEvent> where TEvent : IEvent
+    internal sealed class InMemoryEventDispatcher<TEvent> : IEventDispatcher<TEvent> where TEvent : IEvent
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 

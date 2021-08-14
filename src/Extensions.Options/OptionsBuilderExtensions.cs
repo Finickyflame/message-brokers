@@ -3,7 +3,7 @@ using System;
 
 namespace Microsoft.Extensions.Options
 {
-    public static class Extensions
+    public static class OptionsBuilderExtensions
     {
         public static OptionsBuilder<TOptions> Create<TOptions>(this OptionsBuilder<TOptions> builder, Func<TOptions> optionsFactory)
             where TOptions : class

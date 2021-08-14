@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MessageBrokers.Kafka
 {
-    internal class KafkaMessageCollection
+    internal sealed class KafkaMessageCollection
     {
         private readonly ILogger<KafkaMessageCollection> _logger;
         private readonly Dictionary<IMessage, ConsumeResult<string, string>> _results = new();

@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CQRS.Events.Internals
+namespace CQRS.Events
 {
-    internal class InternalEventDispatcher : IEventDispatcher
+    public class EventDispatcher : IEventDispatcher
     {
         protected IServiceProvider Services { get; }
 
-        public InternalEventDispatcher(IServiceProvider servicesServices)
+        public EventDispatcher(IServiceProvider servicesServices)
         {
             this.Services = servicesServices;
         }

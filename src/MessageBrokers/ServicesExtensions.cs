@@ -34,14 +34,14 @@ namespace MessageBrokers
 
         public static IServiceCollection AddInMemoryMessageProducer(this IServiceCollection services)
         {
-            if (services.Any(service => service.ImplementationType == typeof(InternalMessageProducer)))
+            if (services.Any(service => service.ImplementationType == typeof(MessageProducer)))
             {
                 return services;
             }
             services.AddInMemoryEventDispatcher();
-            services.AddScoped<IEventDispatcher, InternalMessageProducer>();
+            services.AddScoped<IEventDispatcher, MessageProducer>();
             services.AddScoped<IMessageConsumer, InternalMessageConsumer>();
-            services.AddScoped<IMessageProducer, InternalMessageProducer>();
+            services.AddScoped<IMessageProducer, MessageProducer>();
             services.AddScoped(typeof(IMessageProducer<>), typeof(InMemoryMessageProducer<>));
             return services;
         }

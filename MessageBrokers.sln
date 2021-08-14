@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeConsole", "exam
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{C755B9C4-F93C-4879-82D2-1C1A81E0A7D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Common", "src\Hosting.Common\Hosting.Common.csproj", "{1A2EDE28-E8D9-4D81-9AEA-1B1973E09F80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.Hosting", "src\Extensions.Hosting\Extensions.Hosting.csproj", "{1A2EDE28-E8D9-4D81-9AEA-1B1973E09F80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeWorker", "examples\KafkaConsumeWorker\KafkaConsumeWorker.csproj", "{8EFBAF82-D93E-45C8-9A50-1905B477215E}"
 EndProject

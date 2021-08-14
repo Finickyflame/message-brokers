@@ -38,7 +38,7 @@ namespace CQRS.Events
             {
                 return services;
             }
-            services.AddScoped<IEventDispatcher, InternalEventDispatcher>();
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
             services.AddScoped(typeof(IEventDispatcher<>), typeof(InMemoryEventDispatcher<>));
             return services;
         }
