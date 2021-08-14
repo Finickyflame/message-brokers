@@ -1,0 +1,19 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "KafkaProduceConsole OrderCreated": {
+      "commandName": "Project",
+      "commandLineArgs": "runtask=ProduceOrdersCreatedTask",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "KafkaProduceConsole OrderCanceled": {
+      "commandName": "Project",
+      "commandLineArgs": "runtask=ProduceOrdersCanceledTask",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
