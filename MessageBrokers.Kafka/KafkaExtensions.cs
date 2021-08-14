@@ -1,9 +1,9 @@
 ﻿using Confluent.Kafka;
+using MessageBrokers.Extending;
 using MessageBrokers.Kafka.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
 
 namespace MessageBrokers.Kafka
 {
@@ -19,18 +19,14 @@ namespace MessageBrokers.Kafka
 
         private static IServiceCollection TryAddKafkaServices(this IServiceCollection services)
         {
-            if (services.Any(service => service.ServiceType == typeof(KafkaMessageConverter<>)))
+            return services.TryAddMessageBrokerClient<KafkaClientOptions, KafkaClientSecurityOptions>("Kafka", () =>
             {
-                return services;
-            }
-
-            services.TryAddMessageBrokerServices();
-            services.AddSingleton(typeof(KafkaMessageConverter<>));
-            services.AddScoped<KafkaMessageCollection>();
-            services.AddOptions<KafkaClientOptions>().BindConfiguration("Kafka:client");
-            services.AddOptions<ProducerConfig>().Create((IOptions<KafkaClientOptions> options) => new ProducerConfig(options.Value.KafkaConfig));
-            services.AddOptions<ConsumerConfig>().Create((IOptions<KafkaClientOptions> options) => new ConsumerConfig(options.Value.KafkaConfig));
-            return services;
+                services.AddScoped<KafkaMessageCollection>();
+                services.AddSingleton(typeof(KafkaMessageConsumerConverter<>));
+                services.AddSingleton(typeof(KafkaMessageProducerConverter<>));
+                services.AddOptions<ProducerConfig>().Create((IOptions<KafkaClientOptions> options) => new ProducerConfig(options.Value.KafkaConfig));
+                services.AddOptions<ConsumerConfig>().Create((IOptions<KafkaClientOptions> options) => new ConsumerConfig(options.Value.KafkaConfig));
+            });
         }
     }
 }

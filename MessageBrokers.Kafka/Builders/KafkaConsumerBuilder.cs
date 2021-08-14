@@ -1,9 +1,8 @@
 ﻿using Confluent.Kafka;
-using Events;
+using CQRS.Events;
 using MessageBrokers.Kafka.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Text.Json;
 
 namespace MessageBrokers.Kafka
 {
@@ -41,7 +40,8 @@ namespace MessageBrokers.Kafka
         public KafkaConsumerBuilder AddMessage<TMessage>(string topic, string groupId, Action<KafkaConsumerOptions<TMessage>>? configure = null) where TMessage : class, IMessage, new()
         {
             return this
-                .AddConsumerOptions((consumerConfig, serializerOptions) => new KafkaConsumerOptions<TMessage>(topic, groupId, consumerConfig, serializerOptions), configure)
+                .AddConsumerOptions<TMessage, KafkaConsumerOptions<TMessage>>((consumerConfig, serializerOptions) 
+                    => new KafkaConsumerOptions<TMessage>(topic, groupId, consumerConfig, serializerOptions), configure)
                 .AddMessageConsumer<TMessage, KafkaMessageConsumer<TMessage>>();
         }
     }

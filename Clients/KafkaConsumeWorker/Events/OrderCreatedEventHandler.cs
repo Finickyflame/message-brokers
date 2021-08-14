@@ -1,4 +1,4 @@
-using Events;
+using CQRS.Events;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 

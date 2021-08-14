@@ -1,4 +1,4 @@
-﻿using Events;
+﻿using CQRS.Events;
 using KafkaConsumeWorker.Events;
 using MessageBrokers.Kafka;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +11,7 @@ namespace KafkaConsumeWorker
         public static Task Main(string[] args) =>
             CreateHostBuilder(args)
                 .Build()
-                .RunWithTasksAsync();
+                .RunAsync();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

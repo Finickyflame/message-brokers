@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CQRS.Events.Extending;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Events
+namespace CQRS.Events.Internals
 {
-    internal class InMemoryEventDispatcher : IEventDispatcher
+    internal class InMemoryEventDispatcher<TEvent> : IEventDispatcher<TEvent> where TEvent : IEvent
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
@@ -13,11 +14,11 @@ namespace Events
             this._serviceScopeFactory = serviceScopeFactory;
         }
 
-        public async Task PublishAsync<T>(T @event) where T : IEvent
+        public async Task PublishAsync(TEvent @event)
         {
             using IServiceScope scope = this._serviceScopeFactory.CreateScope();
-            IEnumerable<IEventHandler<T>> handlers = scope.ServiceProvider.GetServices<IEventHandler<T>>();
-            foreach (IEventHandler<T> handler in handlers)
+            IEnumerable<IEventHandler<TEvent>> handlers = scope.ServiceProvider.GetServices<IEventHandler<TEvent>>();
+            foreach (IEventHandler<TEvent> handler in handlers)
             {
                 await handler.HandleAsync(@event);
             }

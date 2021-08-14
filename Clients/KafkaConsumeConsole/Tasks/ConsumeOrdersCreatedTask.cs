@@ -4,6 +4,8 @@ using MessageBrokers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace KafkaConsumeConsole.Tasks
@@ -25,12 +27,16 @@ namespace KafkaConsumeConsole.Tasks
 
         public async Task RunAsync()
         {
-            await foreach (var message in this._messageConsumer.ConsumeAllAsync<Message<OrderCreatedEvent>>(this._taskOptions.ConsumeWaitDuration))
+            IAsyncEnumerable<IMessage> orderCreated = this._messageConsumer.ConsumeAllEventsAsync<OrderCreatedEvent>(this._taskOptions.ConsumeWaitDuration);
+            IAsyncEnumerable<IMessage> orderCanceled = this._messageConsumer.ConsumeAllEventsAsync<OrderCanceledEvent>(this._taskOptions.ConsumeWaitDuration);
+            IAsyncEnumerable<IMessage> messages = orderCreated.Concat(orderCanceled);
+            await foreach (var message in messages)
             {
                 this._logger.LogInformation("Event received: {Event}", message.Value);
                 if (this._taskOptions.AllowCommit)
                 {
                     await this._messageConsumer.CommitAsync(message);
+                    this._logger.LogInformation("Event committed");
                 }
             }
         }

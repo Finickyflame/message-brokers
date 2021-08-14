@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBrokers.Kafka", "Mes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBrokers.Artemis", "MessageBrokers.Artemis\MessageBrokers.Artemis.csproj", "{65CB4620-BD85-4DC2-9A68-8CFABD31C9B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events", "Events\Events.csproj", "{17F9A7C9-2D18-4345-828C-A56F892AE46F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.Events", "CQRS.Events\CQRS.Events.csproj", "{17F9A7C9-2D18-4345-828C-A56F892AE46F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumeConsole", "Clients\KafkaConsumeConsole\KafkaConsumeConsole.csproj", "{F39F7C92-AC51-45D9-AC4B-A469021124D0}"
 EndProject

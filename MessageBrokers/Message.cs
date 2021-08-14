@@ -1,4 +1,4 @@
-﻿using Events;
+﻿using CQRS.Events;
 using System;
 
 namespace MessageBrokers
@@ -26,12 +26,12 @@ namespace MessageBrokers
         
         public DateTimeOffset? CreatedOn { get; init; }
 
-        public TEvent Value { get; init; }
+        public TEvent? Value { get; init; }
 
-        IEvent IMessage.Value
+        IEvent? IMessage.Value
         {
             get => this.Value;
-            init => this.Value = (TEvent)value;
+            init => this.Value = (TEvent?)value;
         }
     }
 }

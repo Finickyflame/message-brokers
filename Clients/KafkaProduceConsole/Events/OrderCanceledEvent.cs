@@ -1,4 +1,4 @@
-﻿using Events;
+﻿using CQRS.Events;
 
 namespace KafkaProduceConsole.Events
 {

@@ -1,11 +1,12 @@
 ﻿using MessageBrokers.Artemis.Builders;
 using MessageBrokers.Artemis.Configurations;
+using MessageBrokers.Extending;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace MessageBrokers.Artemis
 {
-    public static class KafkaExtensions
+    public static class ArtemisExtensions
     {
         public static IServiceCollection AddArtemisMessageProducer(this IServiceCollection services, Action<ArtemisProducerBuilder> configure) => services
             .TryAddArtemisServices()
@@ -17,9 +18,11 @@ namespace MessageBrokers.Artemis
 
         private static IServiceCollection TryAddArtemisServices(this IServiceCollection services)
         {
-            services.TryAddMessageBrokerServices();
-            services.AddOptions<ArtemisClientOptions>().BindConfiguration("Artemis:client");
-            return services;
+            return services.TryAddMessageBrokerClient<ArtemisClientOptions, ArtemisClientSecurityOptions>("Artemis", () =>
+            {
+                services.AddSingleton(typeof(ArtemisMessageConsumerConverter<>));
+                services.AddSingleton(typeof(ArtemisMessageProducerConverter<>));
+            });
         }
     }
 }

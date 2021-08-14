@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Events
+namespace CQRS.Events
 {
     public interface IEventHandler<in TEvent> where TEvent : IEvent
     {

@@ -1,13 +1,12 @@
 ﻿using Confluent.Kafka;
-using Events;
+using CQRS.Events;
 using MessageBrokers.Kafka.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Text.Json;
 
 namespace MessageBrokers.Kafka
 {
-    public class KafkaProducerBuilder : Extending.ProducerBuilder<ProducerConfig, KafkaProducerBuilder>
+    public sealed class KafkaProducerBuilder : Extending.ProducerBuilder<ProducerConfig, KafkaProducerBuilder>
     {
         public KafkaProducerBuilder(IServiceCollection services)
             : base(services)
@@ -38,7 +37,8 @@ namespace MessageBrokers.Kafka
             where TMessage : class, IMessage, new()
         {
             return this
-                .AddProducerOptions((producerConfig, serializerOptions) => new KafkaProducerOptions<TMessage>(topic, producerConfig, serializerOptions), configure)
+                .AddProducerOptions<TMessage, KafkaProducerOptions<TMessage>>((producerConfig, serializerOptions)
+                    => new KafkaProducerOptions<TMessage>(topic, producerConfig, serializerOptions), configure)
                 .AddMessageProducer<TMessage, KafkaMessageProducer<TMessage>>();
         }
     }

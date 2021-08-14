@@ -1,15 +1,16 @@
-﻿
+﻿using MessageBrokers.Extending;
+
 namespace MessageBrokers.Artemis.Configurations
 {
-    public record ArtemisClientOptions
+    public record ArtemisClientOptions : IClientOptions<ArtemisClientSecurityOptions>
     {
         public ArtemisClientOptions()
         {
-            this.Security = new ArtemisSecurityOptions();
+            this.Security = new ArtemisClientSecurityOptions();
         }
 
         public string? Server { get; set; }
 
-        public ArtemisSecurityOptions Security { get; internal set; }
+        public ArtemisClientSecurityOptions Security { get; init; }
     }
 }

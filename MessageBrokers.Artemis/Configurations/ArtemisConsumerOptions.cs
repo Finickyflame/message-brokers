@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace MessageBrokers.Artemis.Configurations
 {
-    public class ArtemisConsumerOptions<TMessage> : IConsumerOptions<TMessage> 
+    public record ArtemisConsumerOptions<TMessage> : IConsumerOptions<TMessage> 
         where TMessage : IMessage
     {
         public ArtemisConsumerOptions(string address, string queue, ConsumerConfiguration configuration, JsonSerializerOptions serializerOptions)

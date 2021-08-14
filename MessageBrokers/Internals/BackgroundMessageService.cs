@@ -1,27 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
-    internal class ScopedBackgroundMessageService<TMessage> : BackgroundService where TMessage : IMessage, new()
-    {
-        private readonly IServiceProvider _serviceProvider;
-
-        public ScopedBackgroundMessageService(IServiceProvider serviceProvider)
-        {
-            this._serviceProvider = serviceProvider;
-        }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            using IServiceScope scope = this._serviceProvider.CreateScope();
-            var service = scope.ServiceProvider.GetRequiredService<BackgroundMessageService<TMessage>>();
-            await service.ExecuteAsync(stoppingToken);
-        }
-    }
-    internal class BackgroundMessageService<TMessage> where TMessage : IMessage, new() 
+    internal sealed class BackgroundMessageService<TMessage> 
+        where TMessage : IMessage, new() 
     {
         private readonly IMessageConsumer _messageConsumer;
         private readonly IMessageProducer _messageProducer;

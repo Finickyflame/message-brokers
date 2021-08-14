@@ -11,9 +11,9 @@ namespace MessageBrokers.Artemis
     {
         private readonly ArtemisConsumerOptions<TMessage> _options;
         private readonly IConnection _connection;
-        private readonly ArtemisMessageConverter<TMessage> _converter;
+        private readonly ArtemisMessageConsumerConverter<TMessage> _converter;
 
-        public ArtemisMessageConsumer(ArtemisConsumerOptions<TMessage> options, IConnection connection, ArtemisMessageConverter<TMessage> converter)
+        public ArtemisMessageConsumer(ArtemisConsumerOptions<TMessage> options, IConnection connection, ArtemisMessageConsumerConverter<TMessage> converter)
         {
             this._options = options;
             this._connection = connection;

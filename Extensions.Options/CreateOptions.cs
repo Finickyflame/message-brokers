@@ -109,7 +109,8 @@ namespace Microsoft.Extensions.Options
         /// </summary>
         /// <param name="setups">The configuration actions to run.</param>
         /// <param name="postConfigures">The initialization actions to run.</param>
-        /// <param name="dependency">A dependency.</param>
+        /// <param name="dependency1">A dependency.</param>
+        /// <param name="dependency2">A dependency.</param>
         /// <param name="factory"></param>
         public CreateOptions(IEnumerable<IConfigureOptions<TOptions>> setups, IEnumerable<IPostConfigureOptions<TOptions>> postConfigures, TDep1 dependency1,TDep2 dependency2, Func<TDep1,TDep2, TOptions> factory)
             : base(setups, postConfigures)
@@ -126,6 +127,7 @@ namespace Microsoft.Extensions.Options
         /// <param name="postConfigures">The initialization actions to run.</param>
         /// <param name="validations">The validations to run.</param>
         /// <param name="dependency1">A dependency.</param>
+        /// <param name="dependency2">A dependency.</param>
         /// <param name="factory"></param>
         public CreateOptions(IEnumerable<IConfigureOptions<TOptions>> setups, IEnumerable<IPostConfigureOptions<TOptions>> postConfigures, IEnumerable<IValidateOptions<TOptions>> validations, TDep1 dependency1,TDep2 dependency2, Func<TDep1,TDep2, TOptions> factory)
             : base(setups, postConfigures, validations)

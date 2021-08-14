@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using CQRS.Events.Extending;
+using CQRS.Events.Internals;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Reflection;
 
-namespace Events
+namespace CQRS.Events
 {
-    public static class Extensions
+    public static class ServicesExtensions
     {
         public static IServiceCollection AddEventHandlers(this IServiceCollection services, params Assembly[] assemblies)
         {
@@ -30,13 +32,14 @@ namespace Events
             where TEvent : IEvent
             => services.AddTransient<IEventHandler<TEvent>, TEventHandler>();
 
-        public static IServiceCollection AddInMemoryEventDispatcher(this IServiceCollection services) => services
-            .TryAddEventDispatcher();
-
-        internal static IServiceCollection TryAddEventDispatcher(this IServiceCollection services)
+        public static IServiceCollection AddInMemoryEventDispatcher(this IServiceCollection services)
         {
-            services.TryAddSingleton<InMemoryEventDispatcher>();
-            services.TryAddSingleton<IEventDispatcher, InMemoryEventDispatcher>();
+            if (services.Any(service => service.ImplementationType == typeof(IEventDispatcher)))
+            {
+                return services;
+            }
+            services.AddScoped<IEventDispatcher, InternalEventDispatcher>();
+            services.AddScoped(typeof(IEventDispatcher<>), typeof(InMemoryEventDispatcher<>));
             return services;
         }
     }

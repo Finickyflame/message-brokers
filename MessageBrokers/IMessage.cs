@@ -1,4 +1,4 @@
-﻿using Events;
+﻿using CQRS.Events;
 using System;
 
 namespace MessageBrokers
@@ -9,6 +9,6 @@ namespace MessageBrokers
 
         public DateTimeOffset? CreatedOn { get; init; }
 
-        public IEvent Value { get; init; }
+        public IEvent? Value { get; init; }
     }
 }

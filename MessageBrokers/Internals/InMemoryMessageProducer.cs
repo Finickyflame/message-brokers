@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MessageBrokers.Extending;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MessageBrokers.Internals
 {
-    internal sealed class InMemoryMessageProducer : IMessageProducer
+    internal sealed class InMemoryMessageProducer<TMessage> : IMessageProducer<TMessage>
+        where TMessage : IMessage
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
@@ -13,7 +15,7 @@ namespace MessageBrokers.Internals
             this._serviceScopeFactory = serviceScopeFactory;
         }
 
-        public async Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public async Task PublishAsync(TMessage message)
         {
             using IServiceScope scope = this._serviceScopeFactory.CreateScope();
             IEnumerable<IMessageHandler<TMessage>> handlers = scope.ServiceProvider.GetServices<IMessageHandler<TMessage>>();

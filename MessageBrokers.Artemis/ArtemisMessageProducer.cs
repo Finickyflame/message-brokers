@@ -10,26 +10,29 @@ namespace MessageBrokers.Artemis
     internal sealed class ArtemisMessageProducer<TMessage> : IMessageProducer<TMessage>, IAsyncDisposable
         where TMessage : IMessage, new()
     {
-        private readonly ArtemisMessageConverter<TMessage> _converter;
-        private readonly Lazy<Task<IProducer>> _producer;
+        private readonly IConnection _connection;
+        private readonly ArtemisMessageProducerConverter<TMessage> _converter;
+        private IProducer? _producer;
+        private readonly ArtemisProducerOptions<TMessage> _options;
 
-        public ArtemisMessageProducer(IConnection connection, IOptions<ArtemisProducerOptions<TMessage>> options, ArtemisMessageConverter<TMessage> converter)
+        public ArtemisMessageProducer(IConnection connection, IOptions<ArtemisProducerOptions<TMessage>> options, ArtemisMessageProducerConverter<TMessage> converter)
         {
+            this._options = options.Value;
+            this._connection = connection;
             this._converter = converter;
-            this._producer = new Lazy<Task<IProducer>>(async () => await connection.CreateProducerAsync(options.Value.Configuration));
         }
 
         public async Task PublishAsync(TMessage message)
         {
-            IProducer producer = await this._producer.Value;
-            await producer.SendAsync(this._converter.ConvertMessage(message));
+            this._producer ??= await this._connection.CreateProducerAsync(this._options.Configuration);
+            await this._producer.SendAsync(this._converter.ConvertMessage(message));
         }
 
         public async ValueTask DisposeAsync()
         {
-            if (this._producer.IsValueCreated)
+            if (this._producer is not null)
             {
-                await (await this._producer.Value).DisposeAsync();
+                await this._producer.DisposeAsync();
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using MessageBrokers.Extending;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,25 +34,6 @@ namespace MessageBrokers.Internals
                 throw new UnregisteredMessageException<TMessage>();
             }
             await consumer.CommitAsync(message);
-        }
-    }
-    
-    internal sealed class InternalMessageProducer : IMessageProducer
-    {
-        private readonly IServiceProvider _services;
-
-        public InternalMessageProducer(IServiceProvider services)
-        {
-            this._services = services;
-        }
-
-        public async Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
-        {
-            IEnumerable<IMessageProducer<TMessage>> producers = this._services.GetServices<IMessageProducer<TMessage>>();
-            foreach (IMessageProducer<TMessage> producer in producers)
-            {
-                await producer.PublishAsync(message);
-            }
         }
     }
 }

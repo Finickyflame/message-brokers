@@ -15,12 +15,12 @@ namespace MessageBrokers.Kafka
     {
         private readonly IConsumer<string, string> _consumer;
         private readonly KafkaMessageCollection _messages;
-        private readonly KafkaMessageConverter<TMessage> _converter;
+        private readonly KafkaMessageConsumerConverter<TMessage> _converter;
 
         public KafkaMessageConsumer(
             IOptions<KafkaConsumerOptions<TMessage>> options,
             KafkaMessageCollection messages,
-            KafkaMessageConverter<TMessage> converter)
+            KafkaMessageConsumerConverter<TMessage> converter)
         {
             this._consumer = CreateConsumer(options.Value);
             this._messages = messages;
@@ -34,7 +34,7 @@ namespace MessageBrokers.Kafka
             TMessage message = this._converter.ConvertMessage(consumeResult);
             this._messages.Add(message, consumeResult);
             return message;
-        }, cancellationToken);
+        }, cancellationToken).ConfigureAwait(false);
 
         public async Task CommitAsync(TMessage message)
         {

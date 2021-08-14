@@ -1,6 +1,8 @@
+using MessageBrokers.Extending;
+
 namespace MessageBrokers.Artemis.Configurations
 {
-    public record ArtemisSecurityOptions
+    public record ArtemisClientSecurityOptions : IClientSecurityOptions
     {
         public string? Username { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿using ActiveMQ.Artemis.Client;
-using Events;
+using CQRS.Events;
 using MessageBrokers.Artemis.Configurations;
 using MessageBrokers.Extending;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using System;
 
 namespace MessageBrokers.Artemis.Builders
 {
-    public class ArtemisConsumerBuilder : ConsumerBuilder<ConsumerConfiguration, ArtemisConsumerBuilder>
+    public sealed class ArtemisConsumerBuilder : ConsumerBuilder<ConsumerConfiguration, ArtemisConsumerBuilder>
     {
         public ArtemisConsumerBuilder(IServiceCollection services)
             : base(services)
@@ -40,7 +40,8 @@ namespace MessageBrokers.Artemis.Builders
             where TMessage : class, IMessage, new()
         {
             return this
-                .AddConsumerOptions((configuration, serializerOptions) => new ArtemisConsumerOptions<TMessage>(address, queue, configuration, serializerOptions), configure)
+                .AddConsumerOptions<TMessage, ArtemisConsumerOptions<TMessage>>((configuration, serializerOptions)
+                    => new ArtemisConsumerOptions<TMessage>(address, queue, configuration, serializerOptions), configure)
                 .AddMessageConsumer<TMessage, ArtemisMessageConsumer<TMessage>>();
         }
     }

@@ -11,10 +11,10 @@ namespace MessageBrokers.Kafka
         where TMessage : IMessage, new()
     {
         private readonly KafkaProducerOptions<TMessage> _options;
-        private readonly KafkaMessageConverter<TMessage> _converter;
+        private readonly KafkaMessageProducerConverter<TMessage> _converter;
         private readonly IProducer<string?, string> _producer;
 
-        public KafkaMessageProducer(IOptions<KafkaProducerOptions<TMessage>> options, KafkaMessageConverter<TMessage> converter)
+        public KafkaMessageProducer(IOptions<KafkaProducerOptions<TMessage>> options, KafkaMessageProducerConverter<TMessage> converter)
         {
             this._options = options.Value;
             this._converter = converter;

@@ -1,10 +1,11 @@
 using Confluent.Kafka;
+using MessageBrokers.Extending;
 using System.Text.Json;
 
 namespace MessageBrokers.Kafka.Configurations
 {
-    // ReSharper disable once UnusedTypeParameter
-    public class KafkaProducerOptions<TMessage> where TMessage : IMessage
+    public record KafkaProducerOptions<TMessage> : IProducerOptions<TMessage>
+        where TMessage : IMessage
     {
         internal KafkaProducerOptions(string topic, ProducerConfig producerConfig, JsonSerializerOptions serializerOptions)
         {

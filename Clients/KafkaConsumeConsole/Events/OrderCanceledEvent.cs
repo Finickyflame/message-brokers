@@ -1,6 +1,6 @@
 ﻿using CQRS.Events;
 
-namespace KafkaConsumeWorker.Events
+namespace KafkaConsumeConsole.Events
 {
     public record OrderCanceledEvent : IEvent
     {

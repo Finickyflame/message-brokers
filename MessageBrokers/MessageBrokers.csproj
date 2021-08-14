@@ -16,7 +16,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Events\Events.csproj" />
+    <ProjectReference Include="..\CQRS.Events\CQRS.Events.csproj" />
     <ProjectReference Include="..\Extensions.Options\Extensions.Options.csproj" />
   </ItemGroup>
 </Project>

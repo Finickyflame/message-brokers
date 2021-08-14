@@ -1,12 +1,12 @@
 ﻿namespace MessageBrokers.Extending
 {
-    public interface IConsumerMessageConverter<in TSource, out TMessage>
+    public interface IMessageConsumerConverter<in TSource, out TMessage>
         where TMessage : IMessage, new()
     {
         TMessage ConvertMessage(TSource message);
     }
     
-    public interface IProducerMessageConverter<out TTarget, in TMessage>
+    public interface IMessageProducerConverter<out TTarget, in TMessage>
         where TMessage : IMessage
     {
         TTarget ConvertMessage(TMessage message);

@@ -23,12 +23,13 @@ namespace MessageBrokers.Extending
             return (TBuilder)this;
         }
 
-        protected TBuilder AddProducerOptions<TOption>(Func<TProducerConfiguration, JsonSerializerOptions, TOption> factory, Action<TOption>? configure)
-            where TOption : class
+        protected TBuilder AddProducerOptions<TMessage, TProducerOptions>(Func<TProducerConfiguration, JsonSerializerOptions, TProducerOptions> factory, Action<TProducerOptions>? configure)
+            where TMessage : class, IMessage
+            where TProducerOptions : class, IProducerOptions<TMessage>
         {
             this.Services
-                .AddOptions<TOption>()
-                .Create<TOption, IOptions<TProducerConfiguration>, IOptionsMonitor<JsonSerializerOptions>>((configOptions, serializerOptions) =>
+                .AddOptions<TProducerOptions>()
+                .Create<TProducerOptions, IOptions<TProducerConfiguration>, IOptionsMonitor<JsonSerializerOptions>>((configOptions, serializerOptions) =>
                     factory(configOptions.Value, serializerOptions.Get(this.Name))
                 )
                 .Configure(option => configure?.Invoke(option));

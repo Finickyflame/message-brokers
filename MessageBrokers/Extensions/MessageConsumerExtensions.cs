@@ -1,7 +1,6 @@
-﻿using Events;
+﻿using CQRS.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,12 +29,12 @@ namespace MessageBrokers
             } while (!ctx.IsCancellationRequested);
         }
 
-        public static IAsyncEnumerable<TEvent> ConsumeAllEventsAsync<TEvent>(this IMessageConsumer messageConsumer, TimeSpan maxDelayPerConsume)
+        public static IAsyncEnumerable<Message<TEvent>> ConsumeAllEventsAsync<TEvent>(this IMessageConsumer messageConsumer, TimeSpan maxDelayPerConsume)
             where TEvent : IEvent
-            => messageConsumer.ConsumeAllAsync<Message<TEvent>>(maxDelayPerConsume).Select(message => message.Value);
+            => messageConsumer.ConsumeAllAsync<Message<TEvent>>(maxDelayPerConsume);
 
-        public static async Task<TEvent> ConsumeEventAsync<TEvent>(this IMessageConsumer messageConsumer, CancellationToken cancellationToken)
+        public static async Task<Message<TEvent>> ConsumeEventAsync<TEvent>(this IMessageConsumer messageConsumer, CancellationToken cancellationToken)
             where TEvent : IEvent
-            => (await messageConsumer.ConsumeAsync<Message<TEvent>>(cancellationToken)).Value;
+            => await messageConsumer.ConsumeAsync<Message<TEvent>>(cancellationToken);
     }
 }

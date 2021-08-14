@@ -21,6 +21,7 @@ namespace KafkaConsumeConsole
                     .AddOptions<TaskOptions>(builder => builder.BindConfiguration("kafka"))
                     .AddKafkaMessageConsumer(options => options
                         .AddEvent<OrderCreatedEvent>(topic: "topic-order-created", groupId: "batch-group-id")
+                        .AddEvent<OrderCanceledEvent>(topic: "topic-order-canceled", groupId: "batch-group-id")
                     )
                 );
     }

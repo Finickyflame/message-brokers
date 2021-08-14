@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Events;
+using CQRS.Events;
 using KafkaProduceConsole.Events;
 using KafkaProduceConsole.Options;
 using Microsoft.Extensions.Hosting;

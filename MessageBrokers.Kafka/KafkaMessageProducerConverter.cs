@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using Events;
 using MessageBrokers.Extending;
 using MessageBrokers.Kafka.Configurations;
 using Microsoft.Extensions.Options;
@@ -9,29 +8,16 @@ using System.Text.Json;
 
 namespace MessageBrokers.Kafka
 {
-    internal class KafkaMessageConverter<TMessage> : IConsumerMessageConverter<ConsumeResult<string, string>, TMessage>, IProducerMessageConverter<Message<string?, string>, TMessage>
-        where TMessage : IMessage, new()
+    internal class KafkaMessageProducerConverter<TMessage> : IMessageProducerConverter<Message<string?, string>, TMessage>
+        where TMessage : IMessage
     {
-        private readonly KafkaConsumerOptions<TMessage> _consumerOptions;
         private readonly KafkaProducerOptions<TMessage> _producerOptions;
         private readonly Type _eventType;
 
-        public KafkaMessageConverter(IOptions<KafkaConsumerOptions<TMessage>> consumerOptions, IOptions<KafkaProducerOptions<TMessage>> producerOptions)
+        public KafkaMessageProducerConverter(IOptions<KafkaProducerOptions<TMessage>> producerOptions)
         {
-            this._consumerOptions = consumerOptions.Value;
             this._producerOptions = producerOptions.Value;
             this._eventType = typeof(TMessage).GetGenericArguments().First();
-        }
-
-        public TMessage ConvertMessage(ConsumeResult<string, string> consumeResult)
-        {
-            var value = (IEvent)JsonSerializer.Deserialize(consumeResult.Message.Value, this._eventType, this._consumerOptions.SerializerOptions)!;
-            return new TMessage
-            {
-                Key = consumeResult.Message.Key,
-                CreatedOn = consumeResult.Message.Timestamp.UtcDateTime,
-                Value = value
-            };
         }
 
         public Message<string?, string> ConvertMessage(TMessage message)

@@ -5,7 +5,6 @@ using System.Text.Json;
 
 namespace MessageBrokers.Kafka.Configurations
 {
-    // ReSharper disable once UnusedTypeParameter
     public record KafkaConsumerOptions<TMessage> : IConsumerOptions<TMessage> 
         where TMessage : IMessage
     {
