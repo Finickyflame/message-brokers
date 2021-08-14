@@ -3,7 +3,7 @@
   "profiles": {
     "KafkaConsumeConsole": {
       "commandName": "Project",
-      "commandLineArgs": "runtask=ConsumeOrdersCreatedTask",
+      "commandLineArgs": "runtask=ConsumeMessagesTask",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
