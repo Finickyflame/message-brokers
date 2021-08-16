@@ -35,5 +35,11 @@ namespace MessageBrokers.Kafka.Configurations
             get => this.KafkaConfig.SaslPassword;
             set => this.KafkaConfig.SaslPassword = value;
         }
+
+        public string? SslCertificateLocation
+        {
+            get => this.KafkaConfig.SslCertificateLocation;
+            set => this.KafkaConfig.SslCertificateLocation = value;
+        }
     }
 }
